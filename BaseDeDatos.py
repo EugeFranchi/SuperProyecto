@@ -1,6 +1,3 @@
-# SuperProyecto
-Mega genial proyecto hiper fabuloso
-
 import csv
 import time
 from os import path
@@ -40,12 +37,46 @@ class BaseDeDatos:
         """
         if self.existe(nombre):
             return
-        else:
-            with open(nombre + ".txt", "w") as file:
-                archivo_csv = csv.writer(file)
-                archivo_csv.writerow([0,time.strftime("%d/%m/%y")])
-            with open(self.resumen, "r+") as resumen:
+        
+        nombres = nombre.lower().split(" ")
+        nombre_arch = "".join(nombres)
+        
+        with open(nombre_arch + ".txt", "w") as file:
+            archivo_csv = csv.writer(file)
+            archivo_csv.writerow([0,time.strftime("%d/%m/%y")])
+        with open(self.resumen, "r+") as resumen:
+            linea = resumen.readline()
+            while linea:
                 linea = resumen.readline()
-                while linea:
-                    linea = resumen.readline()
-                resumen.write("{},{}".format("\n" + nombre, 0))
+            resumen.write("{},{}".format(nombre, "0" + "\n"))
+    
+    
+    def agregar_deuda(self, nombre, monto):
+        """
+        Recibe el nombre de un cliente y el monto de su deuda. Agrega estos
+        a los archivos correspondientes.
+        """
+        self.crear_cliente(nombre)
+        nueva = []
+        nombres = nombre.lower().split(" ")
+        nombre_arch = "".join(nombres)
+        
+        #guardo los datos de los clientes
+        with open(self.resumen) as resumen:
+            archivo_csv = csv.reader(resumen)
+            for datos in archivo_csv:
+                if nombre.lower() == datos[0].lower():
+                    datos[1] = str(int(datos[1]) + monto)
+                nueva.append(datos)
+        
+        #sobreescribo el resumen
+        with open(self.resumen, "w") as resum:
+            for elem in nueva:
+                resum.write("{},{}".format(elem[0], elem[1] + "\n"))
+        
+        #modifico el archivo del cliente
+        with open(nombre_arch + ".txt", "r+") as file:
+            linea = file.readline()
+            while linea:
+                linea = file.readline()
+            file.write("{},{}".format(monto, time.strftime("%d/%m/%y") + "\n"))
