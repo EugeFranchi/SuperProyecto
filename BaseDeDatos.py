@@ -51,6 +51,17 @@ class BaseDeDatos:
             resumen.write("{},{}".format(nombre, "0" + "\n"))
     
     
+    def get_montototal(self, nombre):
+        """
+        Recibe un nombre y devuelve el monto total de su deuda.
+        """
+        with open(self.resumen) as resumen:
+            archivo_csv = csv.reader(resumen)
+            for cliente,monto in archivo_csv:
+                if cliente.lower() == nombre.lower():
+                    return int(monto)
+            return 0    
+    
     def agregar_deuda(self, nombre, monto):
         """
         Recibe el nombre de un cliente y el monto de su deuda. Agrega estos
