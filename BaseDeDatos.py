@@ -103,3 +103,18 @@ class BaseDeDatos:
         self.lista_a_resumen(nueva)
         
         self.deuda_a_cliente(nombre_arch, submonto)
+    
+    
+    def sacar_deuda_total(self, nombre, submonto):
+        """
+        Recibe el nombre de un cliente y elimina su deuda.
+        """
+        if not self.existe(nombre):
+            return
+        
+        nombre_arch = self.nombre_archivo_cliente(nombre)
+        os.remove(nombre_arch + ".txt")
+        
+        nueva = self.resumen_a_lista(nombre, -submonto)
+        
+        self.lista_a_resumen(nueva)
