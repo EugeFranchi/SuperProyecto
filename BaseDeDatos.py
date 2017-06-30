@@ -1,23 +1,14 @@
 import csv
 import time
-from os import path
+import os
 
 class BaseDeDatos:
     
     def __init__(self):
         self.crear_resumen()
         self.resumen = "resumen.txt"
-    
-    
-    def nombre_archivo_cliente(self, nombre):
-        """
-        Recibe un nombre y devuelve el nombre del archivo correspondiente.
-        """
-        nombres = nombre.lower().split(" ")
-        nombre_arch = "".join(nombres)
-        return nombre_arch
 
-    
+
     def crear_resumen(self):
         """
         En caso de no existir el archivo "resumen.txt", lo crea.
@@ -60,6 +51,7 @@ class BaseDeDatos:
             resumen.write("{},{}".format(nombre, "0" + "\n"))
     
     
+    
     def resumen_a_lista(self, nombre, submonto):
         """
         Recibe el nombre del cliente al q se desea agregar un monto en el
@@ -98,14 +90,22 @@ class BaseDeDatos:
             file.write("{},{}".format(submonto, time.strftime("%d/%m/%y") + "\n"))
     
     
+    def nombre_archivo_cliente(self, nombre):
+        """
+        Recibe un nombre y devuelve el nombre del archivo correspondiente.
+        """
+        nombres = nombre.lower().split(" ")
+        nombre_arch = "".join(nombres)
+        return nombre_arch
+    
+    
     def agregar_deuda(self, nombre, submonto):
         """
         Recibe el nombre de un cliente y el monto de su deuda. Agrega estos
         a los archivos correspondientes.
         """
         self.crear_cliente(nombre)
-        nombres = nombre.lower().split(" ")
-        nombre_arch = "".join(nombres)
+        nombre_arch = self.nombre_archivo_cliente(nombre)
         
         nueva = self.resumen_a_lista(nombre,submonto)
         
