@@ -1,14 +1,10 @@
 import cmd
+import csv
+from os import system
 
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
     prompt = '--> '
-    
-    
-    def do_COMANDO(self,parametros):
-        """Este metodo ejecuta un comando"""
-        print("COMANDO - Parametros: ",parametros)
-        Shell().cmdloop()
     
     
     def do_resumen(self, parametros):
