@@ -7,8 +7,17 @@ class BaseDeDatos:
     def __init__(self):
         self.crear_resumen()
         self.resumen = "resumen.txt"
+    
+    
+    def nombre_archivo_cliente(self, nombre):
+        """
+        Recibe un nombre y devuelve el nombre del archivo correspondiente.
+        """
+        nombres = nombre.lower().split(" ")
+        nombre_arch = "".join(nombres)
+        return nombre_arch
 
-
+    
     def crear_resumen(self):
         """
         En caso de no existir el archivo "resumen.txt", lo crea.
