@@ -118,8 +118,6 @@ class BaseDeDatos:
         """
         Recibe el nombre de un cliente y elimina su deuda.
         """
-        if not self.existe(nombre):
-            return
         
         nombre_arch = self.nombre_archivo_cliente(nombre)
         os.remove(nombre_arch + ".txt")
@@ -127,3 +125,36 @@ class BaseDeDatos:
         nueva = self.resumen_a_lista(nombre, -submonto)
         
         self.lista_a_resumen(nueva)
+
+
+    def pagar_deuda_parcial(self,nombre,cantidad):
+        """Recibe el nombre del cliente y la cantidad pagada por el cliente.
+        Modifica el archivo 'resumen.txt' con la nueva cantidad que debe y 
+        su respectivo archivo.
+        """
+        
+        nuevos_montos = self.resumen_a_lista(nombre,-cantidad)
+        self.lista_a_resumen(nuevos_montos)
+        nombre_archivo = self.nombre_archivo_cliente(nombre)
+        self.deuda_a_cliente(nombre_archivo,-cantidad)
+
+
+    def sacar_deuda(self, nombre, submonto):
+        """
+        Recibe el nombre del cliente y un submonto. En caso de que el 
+        monto cubra la deuda, se elimina el archivo del cliente y su
+        registro en el resumen. De lo contrario, se disminuye la deuda
+        registrada.
+        """
+        if not self.existe(nombre):
+            print("{} no tiene deudas.".format(nombre))
+        
+        with open(self.resumen, "r+") as resumen:
+            arch_csv = csv.reader(resumen)
+            for cliente,monto in arch_csv:
+                if cliente.lower() == nombre.lower():
+                    if int(monto) == submonto:
+                        self.sacar_deuda_total(nombre, submonto)
+                    else:
+                        self.pagar_deuda_parcial(nombre,submonto)
+                    return
