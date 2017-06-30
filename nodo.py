@@ -44,11 +44,21 @@ class GRID:
 		self.last.next = cliente
 		self.last = cliente
 
-	def show(self):
-		while not (self.first == None):
-			print ("{} {} ".format(self.first.nombre,self.first.total))
-			self.first = self.first.next
-
+	def show_resumen(self):
+		current = self.first
+		while not (current == None):
+			print ("{} {} ".format(current.nombre,current.total))
+			current = current.next
+	
+	def show_cliente(self,nombre):
+		current = self.first
+		while not (current == None):
+			if current.nombre == nombre:
+				print(current.nomnre,":\n")
+				for monto in current.montos:
+					print("       {}".format(monto))
+				break
+			current = current.next
 
 def main():
 	leo = CLIENTE("LEO")
