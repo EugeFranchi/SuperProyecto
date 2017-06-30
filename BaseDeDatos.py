@@ -62,7 +62,7 @@ class BaseDeDatos:
                     return int(monto)
             return 0    
     
-    def agregar_deuda(self, nombre, monto):
+    def agregar_deuda(self, nombre, submonto):
         """
         Recibe el nombre de un cliente y el monto de su deuda. Agrega estos
         a los archivos correspondientes.
@@ -77,7 +77,7 @@ class BaseDeDatos:
             archivo_csv = csv.reader(resumen)
             for datos in archivo_csv:
                 if nombre.lower() == datos[0].lower():
-                    datos[1] = str(int(datos[1]) + monto)
+                    datos[1] = str(int(datos[1]) + submonto)
                 nueva.append(datos)
         
         #sobreescribo el resumen
@@ -90,4 +90,4 @@ class BaseDeDatos:
             linea = file.readline()
             while linea:
                 linea = file.readline()
-            file.write("{},{}".format(monto, time.strftime("%d/%m/%y") + "\n"))
+            file.write("{},{}".format(submonto, time.strftime("%d/%m/%y") + "\n"))
