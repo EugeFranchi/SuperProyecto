@@ -1,20 +1,31 @@
 import cmd
 import csv
-from os import system
+import os
 
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
     prompt = '--> '
+    ruler = '='
+    comando_vacio = ''
+    
+    def abrir(self):
+        """
+        Inicia el programa.
+        """
+        system('cls')
+        self.cmdloop()
     
     
     def do_resumen(self, parametros):
         """
-        Imprime por pantalla el resumen.
+        Imprime el resumen.
         """
         with open("resumen.txt") as f:
             arch_csv = csv.reader(f)
             for cliente,monto in arch_csv:
                 print("{}: {}".format(cliente, monto))
+        self.do_clear("p")
+
     
     
     def do_salir(self,parametros):
@@ -23,8 +34,12 @@ class Shell(cmd.Cmd):
         """
         system('cls')
         return True
+
     
-    
-    
-    
-Shell().cmdloop()
+    def emptyline(self):
+        """
+        Deja la flecha limpia.
+        """
+        return None
+
+Shell().abrir() 
