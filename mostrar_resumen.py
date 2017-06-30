@@ -4,7 +4,8 @@ def cargar_al_grid(self):
         with open(self.resumen) as resumen:
             archivo = csv.reader(resumen)
             for datos in archivo:
-                cliente = CLIENTE(datos[0])
-                cliente.add(int(datos[1]))
+                nombre,monto = datos
+                cliente = CLIENTE(nombre)
+                cliente.add(int(total))
                 grid.push(cliente)
         return grid
