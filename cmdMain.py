@@ -9,7 +9,16 @@ class Shell(cmd.Cmd):
         """Este metodo ejecuta un comando"""
         print("COMANDO - Parametros: ",parametros)
         Shell().cmdloop()
-
+    
+    
+    def do_resumen(self, parametros):
+        """
+        Imprime por pantalla el resumen.
+        """
+        with open("resumen.txt") as f:
+            arch_csv = csv.reader(f)
+            for cliente,monto in arch_csv:
+                print("{}: {}".format(cliente, monto))
     
     
     
