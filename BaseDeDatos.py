@@ -43,14 +43,26 @@ class BaseDeDatos:
         nombre_arch = "".join(nombres)
         
         with open(nombre_arch + ".txt", "w") as file:
-            archivo_csv = csv.writer(file)
-            archivo_csv.writerow([0,time.strftime("%d/%m/%y")])
+            file.write("{},{}".format("0",time.strftime("%d/%m/%y" + "\n")))
         with open(self.resumen, "r+") as resumen:
             linea = resumen.readline()
             while linea:
                 linea = resumen.readline()
             resumen.write("{},{}".format(nombre, "0" + "\n"))
     
+    
+    def deuda_de(self, nombre):
+        """
+        Imprime en detalle la deuda del cliente por pantalla.
+        """
+        if not self.existe(nombre):
+            print(nombre + " no tiene deudas.")
+            return
+        nombre_arch = self.nombre_archivo_cliente(nombre)
+        with open(nombre_arch + ".txt") as file:
+            arch_csv = csv.reader(file)
+            for monto,fecha in arch_csv:
+                print("{} - {}".format(fecha, monto))
     
     
     def resumen_a_lista(self, nombre, submonto):
@@ -64,7 +76,7 @@ class BaseDeDatos:
             archivo_csv = csv.reader(resumen)
             for datos in archivo_csv:
                 if nombre.lower() == datos[0].lower():
-                    datos[1] = str(int(datos[1]) + submonto)
+                    datos[1] = str(int(datos[1]) + int(submonto))
                 if int(datos[1]) == 0:
                     continue
                 nueva.append(datos)
