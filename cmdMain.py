@@ -21,6 +21,14 @@ class Shell(cmd.Cmd):
                 print("{}: {}".format(cliente, monto))
     
     
+    def do_salir(self,parametros):
+        """
+        Sale del programa.
+        """
+        system('cls')
+        return True
+    
+    
     
     
 Shell().cmdloop()
