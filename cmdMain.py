@@ -1,7 +1,6 @@
 import cmd
 import csv
 import os
-from os import path
 
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
