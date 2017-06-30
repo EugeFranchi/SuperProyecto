@@ -49,12 +49,20 @@ class Shell(cmd.Cmd):
         """
         Recibe un nombre y muestra en detalle la deuda del cliente.
         """
+        self.bdd.deuda_de(nombre)
         
     
     
     def do_leoPuto(self,parametros):
         """
         Prueba si leo esta leyendo lo q hago.. e.e
+        """
+        print("definitivamente, leo es puto.")
+    
+    
+    def do_imprimir(self,parametros):
+        """
+        Imprime el ticket.
         """
     
     
@@ -71,4 +79,4 @@ class Shell(cmd.Cmd):
         """
         return None
 
-Shell().abrir()  
+Shell().abrir() 
