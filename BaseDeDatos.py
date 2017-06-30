@@ -63,6 +63,8 @@ class BaseDeDatos:
             for datos in archivo_csv:
                 if nombre.lower() == datos[0].lower():
                     datos[1] = str(int(datos[1]) + submonto)
+                if int(datos[1]) == 0:
+                    continue
                 nueva.append(datos)
         return nueva
     
