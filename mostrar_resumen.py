@@ -6,5 +6,5 @@ def cargar_al_grid(self):
             for datos in archivo:
                 cliente = CLIENTE(datos[0])
                 cliente.add(int(datos[1]))
-                grind.push(cliente)
+                grid.push(cliente)
         return grid
