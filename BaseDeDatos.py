@@ -1,6 +1,7 @@
 import csv
 import time
 import os
+from os import path
 
 class BaseDeDatos:
     
