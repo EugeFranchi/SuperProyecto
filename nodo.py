@@ -45,20 +45,38 @@ class GRID:
 		self.last = cliente
 
 	def show_resumen(self):
-		current = self.first
-		while not (current == None):
-			print ("{} {} ".format(current.nombre,current.total))
-			current = current.next
+		#current = self.first
+		#while not (current == None):
+		#	print ("{} {} ".format(current.nombre,current.total))
+		#	current = current.next
+
+		for cliente in self:
+			print("{} {}".format(cliente.nombre,cliente.total))
+
+
 	
 	def show_cliente(self,nombre):
-		current = self.first
-		while not (current == None):
-			if current.nombre == nombre:
-				print(current.nomnre,":\n")
-				for monto in current.montos:
-					print("       {}".format(monto))
-				break
-			current = current.next
+		pass
+
+	def __iter__(self):
+		return ITERGRID(self.first)
+
+class ITERGRID:
+	def __init__(self,first):
+		self.current = first
+
+	def _next(self):
+		
+		if not self.current:
+			raise StopIteration
+
+		cliente = self.current
+		self.current = self.current.next
+		return cliente
+
+	def __next__(self):
+		return self._next()
+
 
 def main():
 	leo = CLIENTE("LEO")
@@ -78,4 +96,4 @@ def main():
 	grid.push(leo)
 	grid.push(lukas)
 	print("grid")
-	grid.show()
+	grid.show_resumen()
