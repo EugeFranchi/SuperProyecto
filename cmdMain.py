@@ -1,6 +1,8 @@
 import cmd
 import csv
 import os
+from BaseDeDatos import BaseDeDatos
+from nodo import CLIENTE
 
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
@@ -11,7 +13,7 @@ class Shell(cmd.Cmd):
         """
         Inicia el programa.
         """
-        system('cls')
+        self.bdd = BaseDeDatos()
         self.cmdloop()
     
     
@@ -23,25 +25,31 @@ class Shell(cmd.Cmd):
             arch_csv = csv.reader(f)
             for cliente,monto in arch_csv:
                 print("{}: {}".format(cliente, monto))
-        self.do_clear("p")
     
     
-    def do_agregar(self, nombre, monto):
+    def do_agregar(self, nombreYmonto):
         """
         Recibe un nombre y monto. Los agrega al resumen y su archivo la deuda.
         """
+        nombre, monto = nombreYmonto.split(" ")
+        self.bdd.agregar_deuda(nombre, int(monto))
+        print("Se han agregado $" + str(monto) + " de deuda a " + nombre + ".")
     
     
-    def do_quitar(self, nombre):
+    def do_quitar(self, nombreYmonto):
         """
         Recibe un nombre y elimina du deuda de los archivos.
         """
+        nombre, monto = nombreYmonto.split(" ")
+        self.bdd.sacar_deuda(nombre, int(monto))
+        print("Se han eliminado $" + str(monto) + " de la deuda de " + nombre)
     
     
     def do_mostrar(self,nombre):
         """
         Recibe un nombre y muestra en detalle la deuda del cliente.
         """
+        
     
     
     def do_leoPuto(self,parametros):
@@ -54,7 +62,6 @@ class Shell(cmd.Cmd):
         """
         Sale del programa.
         """
-        system('cls')
         return True
 
     
@@ -64,4 +71,4 @@ class Shell(cmd.Cmd):
         """
         return None
 
-Shell().abrir() 
+Shell().abrir()  
