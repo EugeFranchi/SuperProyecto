@@ -5,8 +5,7 @@ import os
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
     prompt = '--> '
-    ruler = '='
-    comando_vacio = ''
+    
     
     def abrir(self):
         """
