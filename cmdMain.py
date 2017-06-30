@@ -24,7 +24,30 @@ class Shell(cmd.Cmd):
             for cliente,monto in arch_csv:
                 print("{}: {}".format(cliente, monto))
         self.do_clear("p")
-
+    
+    
+    def do_agregar(self, nombre, monto):
+        """
+        Recibe un nombre y monto. Los agrega al resumen y su archivo la deuda.
+        """
+    
+    
+    def do_quitar(self, nombre):
+        """
+        Recibe un nombre y elimina du deuda de los archivos.
+        """
+    
+    
+    def do_mostrar(self,nombre):
+        """
+        Recibe un nombre y muestra en detalle la deuda del cliente.
+        """
+    
+    
+    def do_leoPuto(self,parametros):
+        """
+        Prueba si leo esta leyendo lo q hago.. e.e
+        """
     
     
     def do_salir(self,parametros):
