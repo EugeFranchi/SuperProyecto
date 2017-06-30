@@ -51,16 +51,41 @@ class BaseDeDatos:
             resumen.write("{},{}".format(nombre, "0" + "\n"))
     
     
-    def get_montototal(self, nombre):
+    def resumen_a_lista(self, nombre, submonto):
         """
-        Recibe un nombre y devuelve el monto total de su deuda.
+        Recibe el nombre del cliente al q se desea agregar un monto en el
+        archivo resumen. Si se desea agregar una deuda, signo del submonto
+        debe ser positivo. En caso contrario, debe ser negativo.
         """
+        nueva = []
         with open(self.resumen) as resumen:
             archivo_csv = csv.reader(resumen)
-            for cliente,monto in archivo_csv:
-                if cliente.lower() == nombre.lower():
-                    return int(monto)
-            return 0    
+            for datos in archivo_csv:
+                if nombre.lower() == datos[0].lower():
+                    datos[1] = str(int(datos[1]) + submonto)
+                nueva.append(datos)
+        return nueva
+    
+    
+    def lista_a_resumen(self, lista):
+        """
+        Sobre escribe el resumen con la lista.
+        """
+        with open(self.resumen, "w") as resum:
+            for elem in lista:
+                resum.write("{},{}".format(elem[0], elem[1] + "\n"))
+    
+    
+    def deuda_a_cliente(self, archivo, submonto):
+        """
+        Agrega la deuda al archivo del cliente.
+        """
+        with open(archivo + ".txt", "r+") as file:
+            linea = file.readline()
+            while linea:
+                linea = file.readline()
+            file.write("{},{}".format(submonto, time.strftime("%d/%m/%y") + "\n"))
+    
     
     def agregar_deuda(self, nombre, submonto):
         """
@@ -68,26 +93,11 @@ class BaseDeDatos:
         a los archivos correspondientes.
         """
         self.crear_cliente(nombre)
-        nueva = []
         nombres = nombre.lower().split(" ")
         nombre_arch = "".join(nombres)
         
-        #guardo los datos de los clientes
-        with open(self.resumen) as resumen:
-            archivo_csv = csv.reader(resumen)
-            for datos in archivo_csv:
-                if nombre.lower() == datos[0].lower():
-                    datos[1] = str(int(datos[1]) + submonto)
-                nueva.append(datos)
+        nueva = self.resumen_a_lista(nombre,submonto)
         
-        #sobreescribo el resumen
-        with open(self.resumen, "w") as resum:
-            for elem in nueva:
-                resum.write("{},{}".format(elem[0], elem[1] + "\n"))
+        self.lista_a_resumen(nueva)
         
-        #modifico el archivo del cliente
-        with open(nombre_arch + ".txt", "r+") as file:
-            linea = file.readline()
-            while linea:
-                linea = file.readline()
-            file.write("{},{}".format(submonto, time.strftime("%d/%m/%y") + "\n"))
+        self.deuda_a_cliente(nombre_arch, submonto)
