@@ -7,10 +7,10 @@ class BaseDeDatos:
     
     ###INITS
     def __init__(self):
-        self.init_resumen()
+        self.create_resumen()
         self.resumen = "resumen.txt"
     
-    def init_resumen(self):
+    def create_resumen(self):
         """
         En caso de no existir el archivo "resumen.txt", lo crea.
         """
@@ -18,7 +18,7 @@ class BaseDeDatos:
             with open("resumen.txt","w") as resumen:
                 resumen.write("")
     
-    def init_cliente(self, nombre):
+    def create_cliente(self, nombre):
         """
         En caso de que un cliente no esté registrado, lo inicializa.
         """
@@ -38,42 +38,64 @@ class BaseDeDatos:
 
     ###CRUD
     
+    
+    def change(self, lista, nombre_arch, monto):
+        """
+        Modifica el resumen y el archivo del cliente.
+        """
+        self.change_resumen(lista)
+        self.change_ArchCliente(nombre_arch, monto)
+
+
     def change_resumen(self, lista):
         """
         Sobre escribe el resumen con la lista.
         """
-        with open(self.resumen, "w") as resum:
-            for elem in lista:
-                resum.write("{},{}".format(elem[0], elem[1] + "\n"))
-    
-    
-    def add_deuda(self, nombre, submonto):
-        """
-        Recibe el nombre de un cliente y el monto de su deuda. Agrega estos
-        a los archivos correspondientes.
-        """
-        self.init_cliente(nombre)
-        nombre_arch = self.get_nombreArchivo(nombre)
+        try:
+            with open(self.resumen, "w") as resum:
+                for elem in lista:
+                    resum.write("{},{}".format(elem[0], elem[1] + "\n"))
         
-        nueva = self.get_listaResumen(nombre,submonto)
-        
-        self.change_resume(nueva)
-        
-        self.change_ArchCliente(nombre_arch, submonto)
+        except ValueError:
+            print("Error rescribiendo resumen.")
     
     
     def change_ArchCliente(self, archivo, submonto):
         """
         Agrega la deuda al archivo del cliente.
         """
-        with open(archivo + ".txt", "r+") as file:
-            linea = file.readline()
-            while linea:
+        try:
+            with open(archivo + ".txt", "r+") as file:
                 linea = file.readline()
-            file.write("{},{}".format(submonto, time.strftime("%d/%m/%y") + "\n"))
+                while linea:
+                    linea = file.readline()
+                file.write("{},{}".format(submonto, time.strftime("%d/%m/%y") + "\n"))
+        
+        except FileNotFoundError:
+            print("Carpeta de cliente no encontrada")    
     
     
-    def remove_deuda(self, nombre, submonto):
+    def add(self, nombre, submonto):
+        """
+        Recibe el nombre de un cliente y el monto de su deuda. Agrega estos
+        a los archivos correspondientes.
+        """
+        self.create_cliente(nombre)
+        nombre_arch = self.get_nombreArchivo(nombre)
+        
+        try:
+            nueva = self.get_listaResumen(nombre,submonto)
+        
+            self.change(nueva, nombre_arch, submonto)
+        
+        except ValueError as e:
+            print(e)
+        except FileNotFoundError as e:
+            print(e)
+
+    
+    
+    def remove(self, nombre, submonto):
         """
         Recibe el nombre del cliente y un submonto. En caso de que el 
         monto cubra la deuda, se elimina el archivo del cliente y su
@@ -104,7 +126,7 @@ class BaseDeDatos:
         
         nueva = self.get_listaResumen(nombre, -submonto)
         
-        self.change_resume(nueva)
+        self.change_resumen(nueva)
     
     
     def remove_deudaParcial(self,nombre,cantidad):
@@ -114,9 +136,8 @@ class BaseDeDatos:
         """
         
         nuevos_montos = self.get_listaResumen(nombre,-cantidad)
-        self.change_resume(nuevos_montos)
         nombre_archivo = self.get_nombreArchivo(nombre)
-        self.change_ArchCliente(nombre_archivo,-cantidad)
+        self.change(nuevos_montos, nombre_archivo, -cantidad)
     
     ###CHECK
     
@@ -126,12 +147,17 @@ class BaseDeDatos:
         Recibe el nombre del cliente y devuelve si se encuentra en el resumen.
         """
         nombre = nombre.lower()
-        with open(self.resumen) as file:
-            archivo_csv = csv.reader(file)
-            for cliente,monto in archivo_csv:
-                if cliente.lower() == nombre:
-                    return True
-            return False
+        
+        try:
+            with open(self.resumen) as file:
+                archivo_csv = csv.reader(file)
+                for cliente,monto in archivo_csv:
+                    if cliente.lower() == nombre:
+                        return True
+                return False
+        
+        except ValueError:
+            print("Error en el resumen.")
     
     ###GET
     
@@ -143,11 +169,18 @@ class BaseDeDatos:
         if not self.is_cliente(nombre):
             print(nombre + " no tiene deudas.")
             return
-        nombre_arch = self.get_nombreArchivo(nombre)
-        with open(nombre_arch + ".txt") as file:
-            arch_csv = csv.reader(file)
-            for monto,fecha in arch_csv:
-                print("{} - {}".format(fecha, monto))
+        
+        try:
+            nombre_arch = self.get_nombreArchivo(nombre)
+            with open(nombre_arch + ".txt") as file:
+                arch_csv = csv.reader(file)
+                for monto,fecha in arch_csv:
+                    print("{} - {}".format(fecha, monto))
+        
+        except FileNotFoundError:
+            print("El cliente no posee archivo de deudas personal.")
+        except IOError:
+            print("Error en el archivo del cliente.")
     
     
     def get_listaResumen(self, nombre, submonto):
@@ -157,15 +190,20 @@ class BaseDeDatos:
         debe ser positivo. En caso contrario, debe ser negativo.
         """
         nueva = []
-        with open(self.resumen) as resumen:
-            archivo_csv = csv.reader(resumen)
-            for datos in archivo_csv:
-                if nombre.lower() == datos[0].lower():
-                    datos[1] = str(int(datos[1]) + int(submonto))
-                if int(datos[1]) == 0:
-                    continue
-                nueva.append(datos)
-        return nueva
+        
+        try:
+            with open(self.resumen) as resumen:
+                archivo_csv = csv.reader(resumen)
+                for datos in archivo_csv:
+                    if nombre.lower() == datos[0].lower():
+                        datos[1] = str(int(datos[1]) + int(submonto))
+                    if int(datos[1]) == 0:
+                        continue
+                    nueva.append(datos)
+            return nueva
+        
+        except ValueError:
+            print("Error en el resumen.")
     
     
     def get_nombreArchivo(self, nombre):
@@ -175,3 +213,4 @@ class BaseDeDatos:
         nombres = nombre.lower().split(" ")
         nombre_arch = "".join(nombres)
         return nombre_arch
+
