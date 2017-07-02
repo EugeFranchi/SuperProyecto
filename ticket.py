@@ -47,7 +47,7 @@ class Ticket:
                 break
             contador -=1
 
-        with open(self_nombre,"w") as arch_escribir:
+        with open(self.nombre,"w") as arch_escribir:
             for linea in lineas:
                 arch_escribir.write("{}\n".format(",".join(linea)))
     
