@@ -30,7 +30,6 @@ class ARCHIVO:
 			linea = file.readline()
 			while linea:
 				linea = file.readline()
-			print(linea)
 			file.write("{}\n".format(",".join(cadenas)))
 
 	#check
