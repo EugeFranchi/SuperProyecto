@@ -25,13 +25,13 @@ class BD:
         return []
     
     
-    def esta_id(self, id):
+    def esta_id(self, ID):
         """
         Devuelve un valor booleano segun este
          o no el id pasado por parametro.
         """
         
-        return self.consulta(id) != []
+        return self.consulta(ID) != []
     
     
     def add(self, *datos):
@@ -51,12 +51,12 @@ class BD:
             file.write(nueva + "\n")
     
     
-    def remove(self, id):
+    def remove(self, ID):
         """
         Remueve la linea con el id indicado.
         """
         
-        if not self.esta_id(id):
+        if not self.esta_id(ID):
             return
         
         archivo = []
@@ -65,7 +65,7 @@ class BD:
         with open(self.nombre) as file:
             arch_csv = csv.reader(file)
             for linea in arch_csv:
-                if linea[0] == id:
+                if linea[0] == ID:
                     continue
                 archivo.append(linea)
         
@@ -76,23 +76,26 @@ class BD:
     
     
     
-    def update(self, id, monto):
+    def update(self, ID, col,values):
         """
         Actualiza la base de datos.
         """
         
-        if not self.esta_id(id):
+        if not self.esta_id(ID):
             return
         
         archivo = []
+        do = True
         
         #guardo las lineas, quitando la que posee el id
         with open(self.nombre) as file:
             arch_csv = csv.reader(file)
             for linea in arch_csv:
-                if linea[0] == id:
-                    linea[1] = int(linea[1]) + int(monto)
-                    linea[1] = str(linea[1])
+                if linea[0] == ID and do == True:
+                    for i in range(len(col)):
+                        linea[i] = values[i]
+                        do = False
+                        break
                 archivo.append(linea)
         
         #reescribo la base de datos
