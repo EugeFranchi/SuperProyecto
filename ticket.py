@@ -82,11 +82,15 @@ class Ticket:
                 
                 
     def get_ultimo(self):
-	"""
-	Devuelve la ultima linea del archivo en una lista.
-	"""
-	ultimo = []
-	with open(self.nombre) as archivo:
-		archivo_csv = csv.reader(archivo)
-		ultimo = archivo_scv[-1]
-	return ultimo
+        """
+        Devuelve la ultima linea del archivo en una lista.
+        """
+        
+        ultimo = []
+        
+        with open(self.nombre) as file:
+            arch_csv = csv.reader(file)
+            for linea in arch_csv:
+                ultimo = linea
+        
+        return ultimo
