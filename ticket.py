@@ -38,11 +38,7 @@ class Ticket:
         Borra la linea que contenga le nombre dentro del ticket,
         si aparace mas de una vez borra su ultima aparicion.
 		"""
-        lineas = []
-        with open(self_nombre) as archivo:
-            archivo_csv = csv.reader(archivo)
-            for linea in archivo_csv:
-                lineas.append(linea)
+        lineas = self.get_all()
 
         contador = len(lineas) -1
         while contador >= 0:
