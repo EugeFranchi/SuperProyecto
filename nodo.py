@@ -1,3 +1,4 @@
+#Code by @masacr3
 class CLIENTE:
 	def __init__(self,nombre):
 		self.nombre = nombre
