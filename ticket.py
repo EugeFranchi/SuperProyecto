@@ -34,18 +34,24 @@ class Ticket:
     
     
     def remove(self,nombre):
-        """
-        Borra la linea que contenga dentro del ticket.
-        """
-
+		"""
+        Borra la linea que contenga le nombre dentro del ticket,
+        si aparace mas de una vez borra su ultima aparicion.
+		"""
         lineas = []
-        with open(self.nombre) as archivo:
+        with open(self_nombre) as archivo:
             archivo_csv = csv.reader(archivo)
             for linea in archivo_csv:
-                if linea[0] != nombre:
-                    lineas.append(archivo_csv)
+                lineas.append(linea)
 
-        with open(self.nombre,"w") as arch_escribir:
+        contador = len(lineas) -1
+        while contador >= 0:
+            if lineas[contador][0].lower() == nombre.lower():
+                lineas.pop(contador)
+                break
+            contador -=1
+
+        with open(self_nombre,"w") as arch_escribir:
             for linea in lineas:
                 arch_escribir.write("{}\n".format(",".join(linea)))
     
