@@ -1,5 +1,6 @@
 #Code by @EugeFranchi and @masacr3 
 from archivo import ARCHIVO
+import csv
 
 class BD:
     
