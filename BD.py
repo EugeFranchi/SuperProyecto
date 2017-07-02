@@ -103,3 +103,11 @@ class BD:
         with open(self.nombre, "w") as file:
             for datos in archivo:
                 file.write(",".join(datos) + "\n")
+
+    def select_all(self):
+        table = []
+        with open(self.nombre) as file:
+            arch_csv = csv.reader(file)
+            for linea in arch_csv:
+                table.append(linea)
+        return table
