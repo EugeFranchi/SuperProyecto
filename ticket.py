@@ -46,3 +46,18 @@ class Ticket:
 	with open(self.nombre,"w") as arch_escribir:
 		for linea in lineas:
 			arch_escribir.write("{}\n".format(",".join(linea)))
+    
+    
+    def get_all(self):
+        """
+        Devuelve una lista con las lineas del archivo.
+        """
+        
+        ticket = []
+        
+        with open(self.nombre) as file:
+            arch_csv = csv.reader(file)
+            for linea in arch_csv:
+                ticket.append(linea)
+        
+        return ticket
