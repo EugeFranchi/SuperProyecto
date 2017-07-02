@@ -24,13 +24,8 @@ class Ticket:
         
         datos = self.database.consulta(cliente)
         deuda = datos[1]
-        data = ",".join([cliente.lower(), str(deuda), str(pagado), time.strftime("%d/%m/%y"), vendedor])
         
-        with open(self.nombre, "r+") as file:
-            linea = file.readline()
-            while linea:
-                linea = file.readline()
-            file.write(data + "\n")
+        self.archivo.add([cliente.lower(), deuda, pagado, time.strftime("%d/%m/%y"), vendedor])
     
     
     def remove(self,nombre):
