@@ -19,7 +19,19 @@ class ARCHIVO:
 		if self.existe():
 			return
 		os.remove(self.nombre)
-
+	
+	
+	def add(self, linea):
+		cadenas = []
+		for elem in linea:
+			cadenas.append(str(elem))
+		
+		with open(self.nombre,"r+") as file:
+			linea = file.readline()
+			while linea:
+				linea = file.readline()
+			print(linea)
+			file.write("{}\n".format(",".join(cadenas)))
 
 	#check
 	def existe(self):
