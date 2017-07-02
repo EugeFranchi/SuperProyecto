@@ -34,7 +34,7 @@ class BD:
         return self.consulta(id) != []
     
     
-    def add(self, datos):
+    def add(self, *datos):
         """
         Recibe una lista de datos y la agrega a la
         base de datos.
