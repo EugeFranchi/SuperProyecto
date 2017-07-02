@@ -1,4 +1,4 @@
-#Code by @EugeFranchi
+#Code by @EugeFranchi and @masacr3 
 from archivo import ARCHIVO
 
 class BD:
