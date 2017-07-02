@@ -94,3 +94,19 @@ class Ticket:
                 ultimo = linea
         
         return ultimo
+    
+    
+    def get_id(self, nombre):
+        """
+        Devuelva los datos correspondientes al nombre.
+        """
+        cliente = []
+        
+        with open(self.nombre) as file:
+            arch_csv = csv.reader(file)
+            for datos in arch_csv:
+                if datos[0].lower() == nombre.lower():
+                    cliente.append(datos)
+        
+        return cliente
+
