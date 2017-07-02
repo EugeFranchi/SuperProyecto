@@ -29,3 +29,20 @@ class Ticket:
             while linea:
                 linea = file.readline()
             file.write(data + "\n")
+            
+            
+    def remove(self,nombre):
+		"""
+        Borra la linea que contenga dentro del ticket.
+		"""
+
+		lineas = []
+		with open(self.nombre) as archivo:
+			archivo_csv = csv.reader(archivo)
+			for linea in archivo_csv:
+				if linea[0] != nombre:
+					lineas.append(archivo_csv)
+
+		with open(self.nombre,"w") as arch_escribir:
+			for linea in lineas:
+				arch_escribir.write("{}\n".format(",".join(linea)))
