@@ -1,3 +1,4 @@
+#Code by @masacr3
 from * import nodo
 from * import DB
 
