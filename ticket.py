@@ -15,13 +15,15 @@ class Ticket:
         self.database = BD(database)
     
     
-    def add(self, cliente, col, pagado, vendedor):
+    def add(self, cliente, pagado, vendedor):
         """
         Agrega una linea de texto al ticket.
         """
+        if not self.database.esta_id(cliente):
+            return
         
         datos = self.database.consulta(cliente)
-        deuda = datos[int(col)]
+        deuda = datos[1]
         data = ",".join([cliente.lower(), str(deuda), str(pagado), time.strftime("%d/%m/%y"), vendedor])
         
         with open(self.nombre, "r+") as file:
@@ -29,23 +31,23 @@ class Ticket:
             while linea:
                 linea = file.readline()
             file.write(data + "\n")
-            
-            
+    
+    
     def remove(self,nombre):
-	"""
+        """
         Borra la linea que contenga dentro del ticket.
-	"""
+        """
 
-	lineas = []
-	with open(self.nombre) as archivo:
-		archivo_csv = csv.reader(archivo)
-		for linea in archivo_csv:
-			if linea[0] != nombre:
-				lineas.append(archivo_csv)
+        lineas = []
+        with open(self.nombre) as archivo:
+            archivo_csv = csv.reader(archivo)
+            for linea in archivo_csv:
+                if linea[0] != nombre:
+                    lineas.append(archivo_csv)
 
-	with open(self.nombre,"w") as arch_escribir:
-		for linea in lineas:
-			arch_escribir.write("{}\n".format(",".join(linea)))
+        with open(self.nombre,"w") as arch_escribir:
+            for linea in lineas:
+                arch_escribir.write("{}\n".format(",".join(linea)))
     
     
     def get_all(self):
@@ -61,13 +63,19 @@ class Ticket:
                 ticket.append(linea)
         
         return ticket
-
-	def get_ultimo(self):
-		"""
-		Devuelve la ultima linea del archivo en una lista.
-		"""
-		ultimo = []
-		with open(self.nombre) as archivo:
-			archivo_csv = csv.reader(archivo)
-			ultimo = archivo_scv[-1]
-		return ultimo
+    
+    
+    def change(self, cliente, fecha, col, valor):
+        """
+        Cambia la primer linea con el nombre y fecha ingresada con 
+        los valores ingresados.
+        """
+        
+        ticket = self.get_all()
+        for datos in ticket:
+            if datos[0].lower() == cliente.lower() and datos[3] == fecha:
+                datos[col] = str(valor)
+        
+        with open(self.nombre, "w") as file:
+            for datos in ticket:
+                file.write(",".join(datos) + "\n")
