@@ -14,7 +14,8 @@ class CLIENTE:
 		i = 0
 		for saldo in self.montos:
 			if saldo == monto:
-				self.montos.pop(i)
+				self.total -= self.montos.pop(i)
+				break
 			i += 1
 
 	def erase(self):
