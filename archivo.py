@@ -1,5 +1,6 @@
 #Code by @masacr3
 from os import path
+import os
 
 class ARCHIVO:
 	"Implement TDas CRUD"
