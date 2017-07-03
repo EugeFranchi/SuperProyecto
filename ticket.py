@@ -9,9 +9,9 @@ class Ticket:
         """
         Inicializa el Ticket.
         """
-        self.archivo = ARCHIVO(nombre)
-        self.archivo.create()
-        self.nombre = self.archivo.nombre
+        self.archivo = ARCHIVO(nombre) # del
+        self.archivo.create() #del
+        self.nombre = self.archivo.nombre #del
         self.database = BD(database)
     
     
@@ -19,16 +19,16 @@ class Ticket:
         """
         Agrega una linea de texto al ticket.
         """
-        if not self.database.esta_id(cliente):
-            return
+        if not self.database.esta_id(cliente): # para que quiero saber si esta el cliente??? solo agregoo:. d eso se va a encargar la logica ---DEL
+            return #del
         
-        datos = self.database.consulta(cliente)
-        deuda = datos[1]
+        datos = self.database.consulta(cliente) #del 
+        deuda = datos[1] # del
         
-        self.archivo.add([cliente.lower(), deuda, pagado, time.strftime("%d/%m/%y"), vendedor])
+        self.archivo.add([cliente.lower(), deuda, pagado, time.strftime("%d/%m/%y"), vendedor]) # noooooo mal 
     
     
-    def remove(self,nombre):
+    def remove(self,nombre): #noooooooo .. TIKET ES UN REGISTROO:::.. no tienen q borrar nada de nada, esta funcion la eliminan
 		"""
         Borra la linea que contenga le nombre dentro del ticket,
         si aparace mas de una vez borra su ultima aparicion.
@@ -62,7 +62,7 @@ class Ticket:
         return ticket
     
     
-    def change(self, cliente, fecha, col, valor):
+    def change(self, cliente, fecha, col, valor): #no tiene change esta clase eliminen esta funcion
         """
         Cambia la primer linea con el nombre y fecha ingresada con 
         los valores ingresados.
@@ -78,7 +78,7 @@ class Ticket:
                 file.write(",".join(datos) + "\n")
                 
                 
-    def get_ultimo(self):
+    def get_ultimo(self): # ? get_ultimo(self,cliente) .. ultima operacion.... 
         """
         Devuelve la ultima linea del archivo en una lista.
         """
@@ -93,7 +93,7 @@ class Ticket:
         return ultimo
     
     
-    def get_id(self, nombre):
+    def get_id(self, nombre): # ?.. eliminar esto .. ya la funcion get_ultimo(self,cliente) lo hace
         """
         Devuelva los datos correspondientes al nombre.
         """
