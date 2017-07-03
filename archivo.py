@@ -16,7 +16,7 @@ class ARCHIVO:
 			nuevoarchivo.write("")
 
 	def delete(self):
-		if self.existe():
+		if not self.existe():
 			return
 		os.remove(self.nombre)
 
