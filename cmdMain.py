@@ -39,15 +39,38 @@ class Shell(cmd.Cmd):
         print("Se han agregado $" + str(monto) + " de deuda a " + nombre + ".")
     
     
-    def do_quitar(self, nombreYmonto):
+    def do_quitar(self, parametros):
         """
         Recibe un nombre y elimina du deuda de los archivos.
         """
-        nombre, monto = nombreYmonto.split(" ")
+        nombre, monto, vendedor = parametros.split(" ")
+        monto = int(monto)
         
+        #Se asegura que el cliente tenga deudas
+        if not self.resumen.esta_id(nombre):
+            print( nombre + "no tiene deudas.")
         
+        arch_cliente = ARCHIVO(nombre)
+        deuda = self.resumen.consulta(nombre)[1]
+        saldo = int(deuda) - monto
+        fecha = time.strftime("%d/%m/%y")
         
-        print("Se han eliminado $" + str(monto) + " de la deuda de " + nombre)
+        #En caso que pague toda la deuda
+        if int(deuda) == monto:
+            self.resumen.remove(nombre)
+            arch_cliente.delete()
+        
+        #En caso que pague parte de ella
+        else:
+            self.resumen.update(nombre, [1], saldo)
+            with open(arch_cliente.nombre) as file:
+                linea = file.readline()
+                while linea:
+                    linea = file.readline()
+                file.writerow("{},{},{}\n".format(-monto,fecha,vendedor))
+        
+        #Agrego a ticket
+        self.ticket.add(nombre,deuda,monto,vendedor)
     
     
     def do_mostrar(self,nombre):
