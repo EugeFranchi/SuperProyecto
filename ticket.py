@@ -2,6 +2,7 @@ from archivo import ARCHIVO
 from BD import BD
 import time
 import csv
+from nodo import CLIENTE
 
 class Ticket:
     
@@ -22,7 +23,7 @@ class Ticket:
         pagado = str(pagado)
         fecha = time.strftime("%d/%m/%y")
         
-        Self.database.add(cliente.nombre,deuda,pagado,fecha,vendedor)
+        self.database.add(cliente.nombre,deuda,pagado,fecha,vendedor)
     
     
     def get_all(self):
@@ -39,19 +40,19 @@ class Ticket:
         """
         
         
-        return self.dabatase.consultar(cliente.nombre)[-1]
+        return self.consultar(cliente.nombre)[-1]
     
     
-    def consultar(self, nombre):
+    def consultar(self, cliente):
         """
         Devuelva los datos correspondientes al nombre.
         """
-        cliente = []
+        pagos = []
         
         with open(self.nombre) as file:
             arch_csv = csv.reader(file)
             for datos in arch_csv:
-                if datos[0].lower() == nombre.lower():
-                    cliente.append(datos)
+                if datos[0].lower() == cliente.nombre.lower():
+                    pagos.append(datos)
         
-        return cliente
+        return pagos
