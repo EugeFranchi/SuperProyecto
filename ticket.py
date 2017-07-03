@@ -43,7 +43,7 @@ class Ticket:
         return self.consultar(cliente.nombre)[-1]
     
     
-    def consultar(self, cliente):
+    def consultar(self, nombre):
         """
         Devuelva los datos correspondientes al nombre.
         """
@@ -52,7 +52,7 @@ class Ticket:
         with open(self.nombre) as file:
             arch_csv = csv.reader(file)
             for datos in arch_csv:
-                if datos[0].lower() == cliente.nombre.lower():
+                if datos[0].lower() == nombre.lower():
                     pagos.append(datos)
         
         return pagos
