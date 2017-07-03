@@ -1,7 +1,7 @@
 import cmd
 import csv
 import os
-from BaseDeDatos import BaseDeDatos
+from BD import BD
 from nodo import CLIENTE
 from ticket import Ticket
 
@@ -14,7 +14,7 @@ class Shell(cmd.Cmd):
         """
         Inicia el programa.
         """
-        self.resumen = BaseDeDatos("resumen")
+        self.resumen = BD("resumen")
         self.ticket = Ticket("tickets")
         self.cmdloop()
     
