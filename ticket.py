@@ -5,46 +5,28 @@ import csv
 
 class Ticket:
     
-    def __init__(self, nombre, database):
+    def __init__(self, nombre):
         """
         Inicializa el Ticket.
         """
-        self.archivo = ARCHIVO(nombre) # del
-        self.archivo.create() #del
-        self.nombre = self.archivo.nombre #del
-        self.database = BD(database)
+
+        self.database = BD(nombre)
+        self.nombre = self.database.nombre
     
     
-    def add(self, cliente, pagado, vendedor):
+    def add(self, cliente, deuda, pagado, vendedor):
         """
         Agrega una linea de texto al ticket.
         """
-        if not self.database.esta_id(cliente): # para que quiero saber si esta el cliente??? solo agregoo:. d eso se va a encargar la logica ---DEL
-            return #del
+        deuda = str(deuda)
+        pagado = str(pagado)
+        fecha = time.strftime("%d/%m/%y")
         
-        datos = self.database.consulta(cliente) #del 
-        deuda = datos[1] # del
-        
-        self.archivo.add([cliente.lower(), deuda, pagado, time.strftime("%d/%m/%y"), vendedor]) # noooooo mal 
-    
-    
-    def remove(self,nombre): #noooooooo .. TIKET ES UN REGISTROO:::.. no tienen q borrar nada de nada, esta funcion la eliminan
-		"""
-        Borra la linea que contenga le nombre dentro del ticket,
-        si aparace mas de una vez borra su ultima aparicion.
-		"""
-        lineas = self.get_all()
-
-        contador = len(lineas) -1
-        while contador >= 0:
-            if lineas[contador][0].lower() == nombre.lower():
-                lineas.pop(contador)
-                break
-            contador -=1
-
-        with open(self.nombre,"w") as arch_escribir:
-            for linea in lineas:
-                arch_escribir.write("{}\n".format(",".join(linea)))
+        with open(self.nombre,"r+") as file:
+            linea = file.readline()
+            while linea:
+                linea = file.readline()
+            file.write("{}\n".format(",".join([cliente, deuda, pagado, fecha, vendedor])))
     
     
     def get_all(self):
@@ -62,23 +44,7 @@ class Ticket:
         return ticket
     
     
-    def change(self, cliente, fecha, col, valor): #no tiene change esta clase eliminen esta funcion
-        """
-        Cambia la primer linea con el nombre y fecha ingresada con 
-        los valores ingresados.
-        """
-        
-        ticket = self.get_all()
-        for datos in ticket:
-            if datos[0].lower() == cliente.lower() and datos[3] == fecha:
-                datos[col] = str(valor)
-        
-        with open(self.nombre, "w") as file:
-            for datos in ticket:
-                file.write(",".join(datos) + "\n")
-                
-                
-    def get_ultimo(self): # ? get_ultimo(self,cliente) .. ultima operacion.... 
+    def get_ultimo(self):
         """
         Devuelve la ultima linea del archivo en una lista.
         """
@@ -93,7 +59,7 @@ class Ticket:
         return ultimo
     
     
-    def get_id(self, nombre): # ?.. eliminar esto .. ya la funcion get_ultimo(self,cliente) lo hace
+    def consultar(self, nombre):
         """
         Devuelva los datos correspondientes al nombre.
         """
@@ -106,4 +72,3 @@ class Ticket:
                     cliente.append(datos)
         
         return cliente
-
