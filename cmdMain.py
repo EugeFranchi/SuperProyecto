@@ -3,6 +3,7 @@ import csv
 import os
 from BaseDeDatos import BaseDeDatos
 from nodo import CLIENTE
+from ticket import Ticket
 
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
@@ -13,7 +14,8 @@ class Shell(cmd.Cmd):
         """
         Inicia el programa.
         """
-        self.bdd = BaseDeDatos()
+        self.resumen = BaseDeDatos("resumen")
+        self.ticket = Ticket("tickets")
         self.cmdloop()
     
     
@@ -21,10 +23,9 @@ class Shell(cmd.Cmd):
         """
         Imprime el resumen.
         """
-        with open("resumen.txt") as f:
-            arch_csv = csv.reader(f)
-            for cliente,monto in arch_csv:
-                print("{}: {}".format(cliente, monto))
+        deudas = self.database.get_all()
+        for deuda in deudas:
+            print("{}: {}".format(deuda[0], deuda[1]))
     
     
     def do_agregar(self, nombreYmonto):
@@ -32,7 +33,9 @@ class Shell(cmd.Cmd):
         Recibe un nombre y monto. Los agrega al resumen y su archivo la deuda.
         """
         nombre, monto = nombreYmonto.split(" ")
-        self.bdd.agregar_deuda(nombre, int(monto))
+        
+        
+        
         print("Se han agregado $" + str(monto) + " de deuda a " + nombre + ".")
     
     
@@ -41,7 +44,9 @@ class Shell(cmd.Cmd):
         Recibe un nombre y elimina du deuda de los archivos.
         """
         nombre, monto = nombreYmonto.split(" ")
-        self.bdd.sacar_deuda(nombre, int(monto))
+        
+        
+        
         print("Se han eliminado $" + str(monto) + " de la deuda de " + nombre)
     
     
@@ -49,15 +54,9 @@ class Shell(cmd.Cmd):
         """
         Recibe un nombre y muestra en detalle la deuda del cliente.
         """
-        self.bdd.deuda_de(nombre)
         
-    
-    
-    def do_leoPuto(self,parametros):
-        """
-        Prueba si leo esta leyendo lo q hago.. e.e
-        """
-        print("definitivamente, leo es puto.")
+        
+
     
     
     def do_imprimir(self,parametros):
@@ -79,4 +78,4 @@ class Shell(cmd.Cmd):
         """
         return None
 
-Shell().abrir() 
+Shell().abrir()    
