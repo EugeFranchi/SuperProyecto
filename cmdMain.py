@@ -41,7 +41,8 @@ class Shell(cmd.Cmd):
     
     def do_quitar(self, parametros):
         """
-        Recibe un nombre y elimina du deuda de los archivos.
+        Recibe el nombre del cliente, monto pagado y vendedor.
+        Reacomoda su deuda de los archivos.
         """
         nombre, monto, vendedor = parametros.split(" ")
         monto = int(monto)
