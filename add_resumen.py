@@ -29,6 +29,7 @@ def add_tiket(cliente,pago,vendedor):
 	saldo = deuda - pago
 	if (saldo)<=0:
 		resumenDB.delete(ID)
+		return
 
 	update_resumen(cliente,saldo)
 
