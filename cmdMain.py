@@ -23,7 +23,7 @@ class Shell(cmd.Cmd):
         """
         Imprime el resumen.
         """
-        deudas = self.database.get_all()
+        deudas = self.resumen.select_all()
         for deuda in deudas:
             print("{}: {}".format(deuda[0], deuda[1]))
     
