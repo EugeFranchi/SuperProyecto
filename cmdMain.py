@@ -41,18 +41,19 @@ class Shell(cmd.Cmd):
     
     def do_quitar(self, parametros):
         """
-        Recibe el nombre del cliente, monto pagado y vendedor.
-        Reacomoda su deuda de los archivos.
+        Recibe un nombre y elimina du deuda de los archivos.
         """
         nombre, monto, vendedor = parametros.split(" ")
         monto = int(monto)
         
         #Se asegura que el cliente tenga deudas
         if not self.resumen.esta_id(nombre):
-            print( nombre + "no tiene deudas.")
+            print( nombre + " no tiene deudas.")
+            return
         
+        cliente = CLIENTE(nombre)
         arch_cliente = ARCHIVO(nombre)
-        deuda = self.resumen.consulta(nombre)[1]
+        nombre, deuda = self.resumen.consulta(nombre)
         saldo = int(deuda) - monto
         fecha = time.strftime("%d/%m/%y")
         
@@ -71,7 +72,7 @@ class Shell(cmd.Cmd):
                 file.writerow("{},{},{}\n".format(-monto,fecha,vendedor))
         
         #Agrego a ticket
-        self.ticket.add(nombre,deuda,monto,vendedor)
+        self.ticket.add(cliente,deuda,monto,vendedor)
     
     
     def do_mostrar(self,nombre):
