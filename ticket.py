@@ -22,41 +22,24 @@ class Ticket:
         pagado = str(pagado)
         fecha = time.strftime("%d/%m/%y")
         
-        with open(self.nombre,"r+") as file:
-            linea = file.readline()
-            while linea:
-                linea = file.readline()
-            file.write("{}\n".format(",".join([cliente, deuda, pagado, fecha, vendedor])))
+        Self.database.add(cliente.nombre,deuda,pagado,fecha,vendedor)
     
     
     def get_all(self):
         """
         Devuelve una lista con las lineas del archivo.
         """
-        
-        ticket = []
-        
-        with open(self.nombre) as file:
-            arch_csv = csv.reader(file)
-            for linea in arch_csv:
-                ticket.append(linea)
-        
-        return ticket
+ 
+        return self.database.select_all()
     
     
-    def get_ultimo(self):
+    def get_ultimo(self, cliente):
         """
         Devuelve la ultima linea del archivo en una lista.
         """
         
-        ultimo = []
         
-        with open(self.nombre) as file:
-            arch_csv = csv.reader(file)
-            for linea in arch_csv:
-                ultimo = linea
-        
-        return ultimo
+        return self.dabatase.consultar(cliente.nombre)[-1]
     
     
     def consultar(self, nombre):
