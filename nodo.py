@@ -47,18 +47,9 @@ class GRID:
 		self.last = cliente
 
 	def show_resumen(self):
-		#current = self.first
-		#while not (current == None):
-		#	print ("{} {} ".format(current.nombre,current.total))
-		#	current = current.next
-
 		for cliente in self:
 			print("{} {}".format(cliente.nombre,cliente.total))
 
-
-	
-	def show_cliente(self,nombre):
-		pass
 
 	def __iter__(self):
 		return ITERGRID(self.first)
