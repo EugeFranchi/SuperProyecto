@@ -29,7 +29,7 @@ class CLIENTE:
 		else:
 			print("argumento no valido")
 
-class GRID:
+class GRIDRESUMEN:
 	def __init__(self):
 		self.first = None
 		self.last = None
@@ -49,7 +49,6 @@ class GRID:
 	def show_resumen(self):
 		for cliente in self:
 			print("{} {}".format(cliente.nombre,cliente.total))
-
 
 	def __iter__(self):
 		return ITERGRID(self.first)
