@@ -68,18 +68,18 @@ class Shell(cmd.Cmd):
         if len(parametros) != 2:
             print("Cantidad de valores ingresador invalida.")
             return
-            
-        nombre, monto = parametros
-        monto = int(monto)
         
-
-        #Se asegura que el cliente tenga deudas
-        if not self.resumen.esta_id(nombre):
-            print( nombre + " no tiene deudas.")
-            return
+        nombre, monto = parametros
         
         if not str(monto).isdigit():
             print("El monto ingresado no es valido.".format(self.vendedor))
+            return
+        
+        monto = int(monto)
+        
+        #Se asegura que el cliente tenga deudas
+        if not self.resumen.esta_id(nombre):
+            print( nombre + " no tiene deudas.")
             return
         
         cliente = CLIENTE(nombre)
@@ -91,7 +91,7 @@ class Shell(cmd.Cmd):
         #En caso que pague toda la deuda
         if int(deuda) == monto:
             self.resumen.remove(nombre)
-            arch_cliente.delete()
+            arch_cliente.database.delete()
         
         #En caso que pague parte de ella
         else:
