@@ -23,7 +23,7 @@ class Ticket:
         pagado = str(pagado)
         fecha = time.strftime("%d/%m/%y")
         
-        self.database.add(cliente.nombre,deuda,pagado,fecha,vendedor)
+        self.database.add([cliente.nombre,deuda,pagado,fecha,vendedor])
     
     
     def get_all(self):
