@@ -1,5 +1,4 @@
-leo,20
+leo,40
 euge,30
-zele,423
-mariano,3
-alberto,4002
+leo,30
+nose,50

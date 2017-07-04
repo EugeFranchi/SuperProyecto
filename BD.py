@@ -95,9 +95,8 @@ class BD:
             for linea in arch_csv:
                 if linea[0] == ID and do == True:
                     for i in range(len(col)):
-                        linea[col[i]] = values[i]
+                        linea[col[i]] = str(values[i])
                     do = False
-                    break
                 archivo.append(linea)
         
         #reescribo la base de datos
