@@ -96,8 +96,8 @@ class BD:
                 if linea[0] == ID and do == True:
                     for i in range(len(col)):
                         linea[col[i]] = values[i]
-                        do = False
-                        break
+                    do = False
+                    break
                 archivo.append(linea)
         
         #reescribo la base de datos
