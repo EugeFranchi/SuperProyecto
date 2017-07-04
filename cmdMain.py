@@ -79,10 +79,17 @@ class Shell(cmd.Cmd):
         """
         Recibe un nombre y muestra en detalle la deuda del cliente.
         """
+        if not self.resumen.esta_id(nombre):
+            print( str(nombre) + " no tiene deudas.")
+            return
         
+        arch_cliente = ARCHIVO(nombre)
+        with open(arch_cliente.nombre) as file:
+            for linea in file:
+                print(linea.rstrip())
         
-
-    
+        nombre,deuda = self.resumen.consulta(nombre)
+        print("Deuda total: " + str(deuda))
     
     def do_imprimir(self,parametros):
         """
