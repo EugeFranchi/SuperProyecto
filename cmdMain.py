@@ -8,7 +8,7 @@ from ticket import Ticket
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
     prompt = '--> '
-    
+    doc_header="Comandos:"
     
     def abrir(self):
         """
