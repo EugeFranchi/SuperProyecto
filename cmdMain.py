@@ -32,11 +32,24 @@ class Shell(cmd.Cmd):
         """
         Recibe un nombre y monto. Los agrega al resumen y su archivo la deuda.
         """
-        nombre, monto = nombreYmonto.split(" ")
+        nombre, monto = nombreYmonto.split()[0],nombreYmonto.split()[-1]
+        if not monto.isdigit():
+            print("El monto ingresado no es valido, {} ;)".format(self.vendedor))
+            return
         
+        #Crea archivo y si no exciste lo crea
+        archivo_cliente = ARCHIVO(nombre)
+        if not archivo_cliente.existe()
+            archivo_cliente.create()
+
+        fecha = time.strftime("%d/%m/%y")
         
-        
-        print("Se han agregado $" + str(monto) + " de deuda a " + nombre + ".")
+        #agrega lineas al final de archivo
+        with open(archivo_cliente.nombre,"a") as archivo:
+            archivo.write("{},{},{}\n".format(monto,fecha,self.vendedor))
+
+        self.resumen.add(nombre, int(monto))
+        print("Se han agregado ${} de deuda a {}.".format(monto,nombre)
     
     
     def do_quitar(self, parametros):
