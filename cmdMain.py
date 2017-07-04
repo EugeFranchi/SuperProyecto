@@ -2,7 +2,7 @@ import cmd
 import csv
 import os
 from BD import BD
-from nodo import CLIENTE
+from nodo import *
 from ticket import Ticket
 
 class Shell(cmd.Cmd):
@@ -109,16 +109,16 @@ class Shell(cmd.Cmd):
         Recibe un nombre y muestra en detalle la deuda del cliente.
         """
         if not self.resumen.esta_id(nombre):
-            print( str(nombre) + " no tiene deudas.")
+            print("{} no tiene deudas.".format(nombre))
             return
-        
-        arch_cliente = ARCHIVO(nombre)
-        with open(arch_cliente.nombre) as file:
-            for linea in file:
-                print(linea.rstrip())
-        
-        nombre,deuda = self.resumen.consulta(nombre)
-        print("Deuda total: " + str(deuda))
+        arch_cliente = BD(nombre)
+        grid_cliente = GRIDCLIENTE(nombre)
+        lineas = arch_cliente.select_all()
+        for datos in lineas:
+            cantidad,fecha,vendedor = datos
+            dato_fiado = DATO_FIADO(cantidad,fecha,vendedor)
+            grid_cliente.agregar(dato_fiado)
+        grid_cliente.mostrar()
     
     def do_imprimir(self,parametros):
         """
