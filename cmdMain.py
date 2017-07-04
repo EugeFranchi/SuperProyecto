@@ -10,13 +10,19 @@ class Shell(cmd.Cmd):
     prompt = '--> '
     doc_header="Comandos:"
     
+    
     def abrir(self):
         """
         Inicia el programa.
         """
         self.resumen = BD("resumen")
         self.ticket = Ticket("tickets")
+        vendedor = input("Ingrese su nombre: ")
+        while not vendedor:
+            vendedor = input("Ingrese su nombre: ")
+        self.vendedor = vendedor
         self.cmdloop()
+
     
     
     def do_resumen(self, parametros):
@@ -39,7 +45,7 @@ class Shell(cmd.Cmd):
         
         #Crea archivo y si no exciste lo crea
         archivo_cliente = ARCHIVO(nombre)
-        if not archivo_cliente.existe()
+        if not archivo_cliente.existe():
             archivo_cliente.create()
 
         fecha = time.strftime("%d/%m/%y")
@@ -49,7 +55,7 @@ class Shell(cmd.Cmd):
             archivo.write("{},{},{}\n".format(monto,fecha,self.vendedor))
 
         self.resumen.add(nombre, int(monto))
-        print("Se han agregado ${} de deuda a {}.".format(monto,nombre)
+        print("Se han agregado ${} de deuda a {}.".format(monto,nombre))
     
     
     def do_quitar(self, parametros):
@@ -59,9 +65,14 @@ class Shell(cmd.Cmd):
         nombre, monto, vendedor = parametros.split(" ")
         monto = int(monto)
         
+
         #Se asegura que el cliente tenga deudas
         if not self.resumen.esta_id(nombre):
             print( nombre + " no tiene deudas.")
+            return
+        
+        if not monto.isdigit():
+            print("El monto ingresado no es valido.".format(self.vendedor))
             return
         
         cliente = CLIENTE(nombre)
@@ -86,6 +97,8 @@ class Shell(cmd.Cmd):
         
         #Agrego a ticket
         self.ticket.add(cliente,deuda,monto,vendedor)
+        
+        print("Se han eliminado $" + str(monto) + " de la deuda de " + nombre)
     
     
     def do_mostrar(self,nombre):
