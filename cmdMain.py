@@ -64,7 +64,12 @@ class Shell(cmd.Cmd):
         """
         Recibe un nombre y elimina du deuda de los archivos.
         """
-        nombre, monto, vendedor = parametros.split(" ")
+        parametros = parametros.split(" ")
+        if len(parametros) != 2:
+            print("Cantidad de valores ingresador invalida.")
+            return
+            
+        nombre, monto = parametros
         monto = int(monto)
         
 
@@ -73,12 +78,12 @@ class Shell(cmd.Cmd):
             print( nombre + " no tiene deudas.")
             return
         
-        if not monto.isdigit():
+        if not str(monto).isdigit():
             print("El monto ingresado no es valido.".format(self.vendedor))
             return
         
         cliente = CLIENTE(nombre)
-        arch_cliente = ARCHIVO(nombre)
+        arch_cliente = BD(nombre)
         nombre, deuda = self.resumen.consulta(nombre)
         saldo = int(deuda) - monto
         fecha = time.strftime("%d/%m/%y")
@@ -90,15 +95,11 @@ class Shell(cmd.Cmd):
         
         #En caso que pague parte de ella
         else:
-            self.resumen.update(nombre, [1], saldo)
-            with open(arch_cliente.nombre) as file:
-                linea = file.readline()
-                while linea:
-                    linea = file.readline()
-                file.writerow("{},{},{}\n".format(-monto,fecha,vendedor))
+            self.resumen.update(nombre, [1], [saldo])
+            arch_cliente.add([-monto,fecha,self.vendedor])
         
         #Agrego a ticket
-        self.ticket.add(cliente,deuda,monto,vendedor)
+        self.ticket.add(cliente,deuda,monto,self.vendedor)
         
         print("Se han eliminado $" + str(monto) + " de la deuda de " + nombre)
     
