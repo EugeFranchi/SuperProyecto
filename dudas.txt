@@ -1,1 +1,2 @@
-el update de bd
+-el update de bd
+-ingresar nombre
