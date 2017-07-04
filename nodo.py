@@ -53,6 +53,48 @@ class GRIDRESUMEN:
 	def __iter__(self):
 		return ITERGRID(self.first)
 
+#------------------------------------------------------------------------------------------------------------------------
+class DATO_FIADO:
+    """Crea un objetos con los datos del cliente de la fecha que se realizo el fiado."""
+
+    def __init__(self,cantidad,fecha,vendedor):
+        """constructor de la clase."""
+        self.fecha = fecha
+        self.cantidad = int(cantidad)
+        self.vendedor = vendedor
+        self.next = None
+
+class GRIDCLIENTE:
+    """Guarda los datos del fiado usuario."""
+    
+    def __init__(self,nombre_cliente):
+	"""Constructor de la clase."""
+        self.nombre = nombre_cliente
+        self.first = None
+        self.last = None
+        self.len = 0
+
+    def agregar(self,dato_fiado):
+	"""Guarda el objeto DATO_FIADO al final de la lista enlazada."""
+        if not self.first:
+            self.first = dato_fiado
+            self.last = dato_fiado
+        else:
+            self.last.next = dato_fiado:
+            self.last = dato_fiado
+        self.len +=1
+
+    def mostrar(self):
+	"""Imprime por pantalla los datos del objeto DATO_FIADO, que se encuentra en la lista enlazada."""
+        print("El cliente {} debe: ".format(self.nombre))
+        for dato_fiado in self:
+            print("{}, el dia: {}, fue atendido por: {}".format(dato_fiado.cantidad,dato_fiado.fecha,dato_fiado.vendedor))
+
+    def __iter__(self):
+        return ITERGRID(self.first)
+
+#----------------------------------------------------------------------------------------------------------------------------
+
 class ITERGRID:
 	def __init__(self,first):
 		self.current = first
