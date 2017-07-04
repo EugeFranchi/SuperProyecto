@@ -42,19 +42,21 @@ class Shell(cmd.Cmd):
         if not monto.isdigit():
             print("El monto ingresado no es valido, {} ;)".format(self.vendedor))
             return
-        
         #Crea archivo y si no exciste lo crea
         archivo_cliente = ARCHIVO(nombre)
         if not archivo_cliente.existe():
             archivo_cliente.create()
-
+            self.resumen.add(nombre, int(monto))
+        else:
+            cliente,deuda_vieja = self.resumen.consulta(nombre)
+            deuda_total = int(deuda_vieja) + int(monto)
+            self.resumen.update(nombre,[1],[deuda_total])
+            
         fecha = time.strftime("%d/%m/%y")
-        
         #agrega lineas al final de archivo
         with open(archivo_cliente.nombre,"a") as archivo:
             archivo.write("{},{},{}\n".format(monto,fecha,self.vendedor))
-
-        self.resumen.add(nombre, int(monto))
+            
         print("Se han agregado ${} de deuda a {}.".format(monto,nombre))
     
     
