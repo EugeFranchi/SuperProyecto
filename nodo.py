@@ -136,7 +136,7 @@ class GRIDTICKET:
     def mostrar(self):
         """Imprime el contenido."""
         for elemento in self:
-            print("El cliente:{}, tiene una deuda de:{}, y pago un total de:{}, la fecha {}, fue atendido por:{}"
+            print("{}, con deuda de {}, pagó {} el {}, atendido por:{}"
                   .format(elemento.nombre,elemento.deuda,elemento.pagado,elemento.fecha, elemento.vendedor))
 
     def __iter__(self):
