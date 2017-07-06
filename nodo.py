@@ -28,7 +28,7 @@ class CLIENTE:
 		    self.total += newMonto
 		    self.montos[index] = newMonto
 		else:
-		    print("argumento no valido")
+		    print("Argumento no valido")
 
 class GRIDRESUMEN:
 	def __init__(self):
