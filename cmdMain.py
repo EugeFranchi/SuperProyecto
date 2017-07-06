@@ -161,7 +161,14 @@ class Shell(cmd.Cmd):
         """
         Imprime el ticket.
         """
-    
+        nombre = parametros.lower()
+        grid_ticket = GRIDTICKET()
+        lista = self.ticket.get_all()
+        for dato in lista:
+            nombre, deuda, pagado, fecha, vendedor = dato
+            datos = DATOTICKET( nombre, deuda, pagado, fecha, vendedor)
+            grid_ticket.agregar(datos)
+        grid_ticket.mostrar()
     
     def do_salir(self,parametros):
         """
