@@ -49,6 +49,13 @@ class GRIDRESUMEN:
 	def show_resumen(self):
 		for cliente in self:
 			print("{} {}".format(cliente.nombre,cliente.total))
+	
+	def show_datos_cliente(self):
+		for cliente in self:
+		    print("Cliente: {}".format(cliente.nombre))
+		    for indice,monto in enumerate(cliente.montos):
+			print("{}- monto: {}".format(indice +1,monto))
+		    print("Total: {}".format(cliente.total))
 
 	def __iter__(self):
 		return ITERGRID(self.first)
@@ -89,7 +96,7 @@ class GRIDCLIENTE:
         print("El cliente {} debe: ".format(self.nombre))
         for dato_fiado in self:
             print("{}, el dia: {}, fue atendido por: {}".format(dato_fiado.cantidad,dato_fiado.fecha,dato_fiado.vendedor))
-
+	
     def __iter__(self):
         return ITERGRID(self.first)
 
