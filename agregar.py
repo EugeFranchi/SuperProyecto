@@ -16,7 +16,6 @@
         Muestra al usuario el contenido de cliente y 
         permite modificarlo si es incorrecto.
         """
-        rtas_validas = [ "si", "no", "*"]
         grid_aux = GRIDRESUMEN()
         grid_aux.push(cliente)
         grid_aux.show_datos_cliente()
