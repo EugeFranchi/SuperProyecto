@@ -97,48 +97,45 @@ class Shell(cmd.Cmd):
             self.resumen.update(nombre,[1],[total_monto])
     
     
-    def do_quitar(self, parametros):
+    def do_quitar(self, nombre):
         """
         Recibe un nombre y elimina du deuda de los archivos.
         """
-        parametros = parametros.split(" ")
-        if len(parametros) != 2:
-            print("Cantidad de valores ingresados invalida.")
-            return
-        
-        nombre, monto = parametros
+        monto = input("Ingrese el monto: ")
+        nombre_l = nombre.lower()
         
         if not str(monto).isdigit():
-            print("El monto ingresado no es valido.".format(self.vendedor))
+            print("Monto no valido.")
             return
         
         monto = int(monto)
         
         #Se asegura que el cliente tenga deudas
-        if not self.resumen.esta_id(nombre):
+        if not self.resumen.esta_id(nombre_l):
             print( nombre + " no tiene deudas.")
             return
         
-        cliente = CLIENTE(nombre)
-        arch_cliente = BD(nombre)
-        nombre, deuda = self.resumen.consulta(nombre)
-        saldo = int(deuda) - monto
+        cliente = CLIENTE(nombre_l)
+        arch_cliente = BD(nombre_l)
+        nom, deuda = self.resumen.consulta(nombre_l)
+        saldo = float(deuda) - monto
         fecha = time.strftime("%d/%m/%y")
         
         #En caso que pague toda la deuda
-        if int(deuda) == monto:
-            self.resumen.remove(nombre)
+        if float(deuda) == monto:
+            self.resumen.remove(nombre_l)
             arch_cliente.database.delete()
+            print( nombre + " ya no posee deudas.")
         
         #En caso que pague parte de ella
         else:
-            self.resumen.update(nombre, [1], [saldo])
+            self.resumen.update(nombre_l, [1], [saldo])
             arch_cliente.add([-monto,fecha,self.vendedor])
+            print("Se han descontado $" + str(monto) + " de la deuda de " + nombre)
         
-        #Agrego a ticket
+        #Agrego a ticket y lo imprime
         self.ticket.add(cliente,deuda,monto,self.vendedor)
-        
-        print("Se han eliminado $" + str(monto) + " de la deuda de " + nombre)
+        self.do_imprimir(cliente.nombre)
     
     
     def do_mostrar(self,nombre):
