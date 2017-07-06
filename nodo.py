@@ -24,10 +24,11 @@ class CLIENTE:
 
 	def change(self,index,newMonto):
 		if -1 < index < len(self.montos):
-			self.total -= self.montos[index] + newMonto
-			self.montos[index] = newMonto
+		    self.total -= self.montos[index]
+		    self.total += newMonto
+		    self.montos[index] = newMonto
 		else:
-			print("argumento no valido")
+		    print("argumento no valido")
 
 class GRIDRESUMEN:
 	def __init__(self):
