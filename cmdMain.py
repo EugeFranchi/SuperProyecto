@@ -157,7 +157,7 @@ class Shell(cmd.Cmd):
             grid_cliente.agregar(dato_fiado)
         grid_cliente.mostrar()
     
-    def do_imprimir(self,parametros):
+    def do_imprimir(self, parametros):
         """
         Imprime el ticket.
         """
@@ -165,9 +165,10 @@ class Shell(cmd.Cmd):
         grid_ticket = GRIDTICKET()
         lista = self.ticket.get_all()
         for dato in lista:
-            nombre, deuda, pagado, fecha, vendedor = dato
-            datos = DATOTICKET( nombre, deuda, pagado, fecha, vendedor)
-            grid_ticket.agregar(datos)
+            cliente, deuda, pagado, fecha, vendedor = dato
+            if cliente == nombre:
+                datos = DATOTICKET( nombre, deuda, pagado, fecha, vendedor)
+                grid_ticket.agregar(datos)
         grid_ticket.mostrar()
     
     def do_salir(self,parametros):
