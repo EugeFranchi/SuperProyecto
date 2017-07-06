@@ -1,9 +1,9 @@
 import cmd
 import csv
 import os
-from BD import BD
+from BD import *
 from nodo import *
-from ticket import Ticket
+from ticket import *
 
 class Shell(cmd.Cmd):
     intro = 'Bienvenido a mi programa.\nIngrese help o ? para listar los comandos.\n'
@@ -71,7 +71,7 @@ class Shell(cmd.Cmd):
         for dato in lista:
             nombre,monto = dato
             cliente = CLIENTE(nombre)
-            cliente.add(int(monto))
+            cliente.add(float(monto))
             grid_resumen.push(cliente)
         grid_resumen.show_resumen()
     
