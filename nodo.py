@@ -102,6 +102,47 @@ class GRIDCLIENTE:
         return ITERGRID(self.first)
 
 #----------------------------------------------------------------------------------------------------------------------------
+class DATOTICKET:
+    """Crea una clase que contiene los datos escrito en el ticket."""
+
+    def __init__(self,nombre,deuda,pagado,fecha,vendedor):
+        """contructor de la clase. """
+        self.nombre = nombre
+        self.deuda = deuda
+        self.pagado = pagado
+        self.fecha = fecha
+        self.vendedor = vendedor
+        self.next = None
+
+class GRIDTICKET:
+    """Permite guardar los elementos e imprimirlos. """
+
+    def __init__(self):
+        """constructor de la clase."""
+        self.first = None
+        self.last = None
+        self.len = 0
+
+    def agregar(self,dato_ticket):
+        """Agrega un objeto DATOTICKET."""
+        if not self.first:
+            self.first = dato_ticket
+            self.last = dato_ticket
+        else:
+            self.last.next = dato_ticket
+            self.last = dato_ticket
+        self.len +=1
+
+    def mostrar(self):
+        """Imprime el contenido."""
+        for elemento in self:
+            print("El cliente:{}, tiene una deuda de:{}, y pago un total de:{}, la fecha {}, fue atendido por:{}"
+                  .format(elemento.nombre,elemento.deuda,elemento.pagado,elemento.fecha, elemento.vendedor))
+
+    def __iter__(self):
+        return ITERGRID(self.first)
+
+#--------------------------------------------------------------------------------------------------------------------------  
 
 class ITERGRID:
 	def __init__(self,first):
