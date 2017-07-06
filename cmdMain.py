@@ -34,30 +34,28 @@ class Shell(cmd.Cmd):
             print("{}: {}".format(deuda[0], deuda[1]))
     
     
-    def do_agregar(self, nombreYmonto):
+    def do_agregar(self, nombreYmontos):
         """
         Recibe un nombre y monto. Los agrega al resumen y su archivo la deuda.
         """
-        nombre, monto = nombreYmonto.split()[0],nombreYmonto.split()[-1]
-        if not monto.isdigit():
-            print("El monto ingresado no es valido, {} ;)".format(self.vendedor))
-            return
-        #Crea archivo y si no exciste lo crea
-        archivo_cliente = ARCHIVO(nombre)
-        if not archivo_cliente.existe():
-            archivo_cliente.create()
-            self.resumen.add(nombre, int(monto))
+        nombre = nombreYmontos.split()
+        montos = []
+        while nombre[-1].isdigit():
+            montos.append(int(nombre.pop(-1)))
+        total_monto= 0
+
+        nombre = " ".join(nombre)
+        usuario_base = BD(nombre)
+        
+        for monto in montos[::-1]:
+                total_monto +=monto
+                fecha = time.strftime("%d/%m/%y")
+                usuario_base.add([monto,fecha,self.vendedor])
+        
+        if not usuario_base.esta_id(nombre):
+            self.resumen.add([nombre,total_monto])
         else:
-            cliente,deuda_vieja = self.resumen.consulta(nombre)
-            deuda_total = int(deuda_vieja) + int(monto)
-            self.resumen.update(nombre,[1],[deuda_total])
-            
-        fecha = time.strftime("%d/%m/%y")
-        #agrega lineas al final de archivo
-        with open(archivo_cliente.nombre,"a") as archivo:
-            archivo.write("{},{},{}\n".format(monto,fecha,self.vendedor))
-            
-        print("Se han agregado ${} de deuda a {}.".format(monto,nombre))
+            self.resumen.update(nombre,[1],[total_monto])
     
     
     def do_quitar(self, parametros):
