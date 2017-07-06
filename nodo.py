@@ -87,7 +87,7 @@ class GRIDCLIENTE:
             self.first = dato_fiado
             self.last = dato_fiado
         else:
-            self.last.next = dato_fiado:
+            self.last.next = dato_fiado
             self.last = dato_fiado
         self.len +=1
 
