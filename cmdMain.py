@@ -185,6 +185,24 @@ class Shell(cmd.Cmd):
         grid_ticket.agregar(ultimo)
         grid_ticket.mostrar()
     
+    def do_imprimir3(self, nombre):
+        """
+        Imprime estilo factura
+        """
+        print(time.strftime("%d/%m/%y"))
+        print()
+        print("Vendedor: " + self.vendedor)
+        print()
+        total = 0
+        arch_cliente = BD(nombre)
+        grid_cliente = GRIDCLIENTE(nombre)
+        lineas = arch_cliente.select_all()
+        for datos in lineas:
+            cantidad,fecha,vendedor = datos
+            total+= float(cantidad)
+            print(fecha + " - " + cantidad)
+        print("Total: " + str(total))
+    
     def do_salir(self,parametros):
         """
         Sale del programa.
