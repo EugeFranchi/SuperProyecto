@@ -103,7 +103,7 @@ class Shell(cmd.Cmd):
         """
         parametros = parametros.split(" ")
         if len(parametros) != 2:
-            print("Cantidad de valores ingresador invalida.")
+            print("Cantidad de valores ingresados invalida.")
             return
         
         nombre, monto = parametros
