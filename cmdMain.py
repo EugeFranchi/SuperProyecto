@@ -157,9 +157,9 @@ class Shell(cmd.Cmd):
             grid_cliente.agregar(dato_fiado)
         grid_cliente.mostrar()
     
-    def do_imprimir(self, parametros):
+    def do_imprimir1(self, parametros):
         """
-        Imprime el ticket.
+        Imprime toda aparicion de un cliente en ticket.
         """
         nombre = parametros.lower()
         grid_ticket = GRIDTICKET()
@@ -169,6 +169,20 @@ class Shell(cmd.Cmd):
             if cliente == nombre:
                 datos = DATOTICKET( nombre, deuda, pagado, fecha, vendedor)
                 grid_ticket.agregar(datos)
+        grid_ticket.mostrar()
+    
+    def do_imprimir2(self, parametros):
+        """
+        Imprime la ultima aparicion del cliente en ticket.
+        """
+        nombre = parametros.lower()
+        grid_ticket = GRIDTICKET()
+        lista = self.ticket.get_all()
+        for dato in lista:
+            cliente, deuda, pagado, fecha, vendedor = dato
+            if cliente == nombre:
+                ultimo = DATOTICKET( nombre, deuda, pagado, fecha, vendedor)
+        grid_ticket.agregar(ultimo)
         grid_ticket.mostrar()
     
     def do_salir(self,parametros):
