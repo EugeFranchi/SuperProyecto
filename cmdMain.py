@@ -22,7 +22,44 @@ class Shell(cmd.Cmd):
             vendedor = input("Ingrese su nombre: ")
         self.vendedor = vendedor
         self.cmdloop()
+    
+    def _pedir_monto(self,cliente):
+        """Pide montos al usuario hasta que no joda mas."""
+        #verficar que sea entero
+        monto = input("ingrese un monto o precione enter para dejar de agregar: ")
+        if monto == "":
+            return cliente
+        if not self._verificar_valor(monto):
+            print("Monto no valido...")
+            return self._pedir_monto(cliente)
+        cliente.add(float(monto))
+        return self._pedir_monto(cliente)
 
+    def _verificar_pasado(self,cliente):
+        """Muestra al usuario el contenido de cliente y permite modificarlo si es incorrecto."""
+        grid_aux = GRIDRESUMEN()
+        grid_aux.push(cliente)
+        grid_aux.show_datos_cliente()
+        respuesta = input("¿Los datos ingresados son validos?: ")
+        if respuesta != "si":
+            if respuesta != "no":
+                print("respuesta no valida...")
+                return self._verificar_pasado(cliente)
+            nueva_posicion = input("¿que valor desea cambiar,indique su posicion?: ")
+            nuevo_monto = input("Ingrese el nuevo valor que debe contener: ")
+            if not self._verificar_valor(nuevo_monto):
+                print("Monto no valido...")
+                return self._verificar_pasado(cliente)
+            cliente.change(int(nueva_posicion) -1,float(nuevo_monto))
+            return self._verificar_pasado(cliente)
+        return cliente
+
+    def _verificar_valor(self,monto):
+        """Verifica si el parametro pasado es digito ya sea entero o flotante,devuelve un boleano."""
+        for caracter in monto:
+                if not caracter.isdigit() and caracter != ".":
+                    return False
+        return True
     
     
     def do_resumen(self, parametros):
@@ -39,25 +76,22 @@ class Shell(cmd.Cmd):
         grid_resumen.show_resumen()
     
     
-    def do_agregar(self, nombreYmontos):
+    def do_agregar(self, nombre):
         """
         Recibe un nombre y monto. Los agrega al resumen y su archivo la deuda.
         """
-        nombre = nombreYmontos.split()
-        montos = []
-        while nombre[-1].isdigit():
-            montos.append(int(nombre.pop(-1)))
-        total_monto= 0
-
-        nombre = " ".join(nombre)
-        usuario_base = BD(nombre)
+        cliente = CLIENTE(nombre)
+        cliente = self._pedir_monto(cliente)
+        self._verificar_pasado(cliente)
         
-        for monto in montos[::-1]:
-                total_monto +=monto
-                fecha = time.strftime("%d/%m/%y")
-                usuario_base.add([monto,fecha,self.vendedor])
+        arch_cliente = BD(nombre)        
+        total_monto = 0
+        for monto in cliente.montos:
+            total_monto +=monto
+            fecha = time.strftime("%d/%m/%y")
+            arch_cliente.add([monto,fecha,self.vendedor])
         
-        if not usuario_base.esta_id(nombre):
+        if not arch_cliente.esta_id(nombre):
             self.resumen.add([nombre,total_monto])
         else:
             self.resumen.update(nombre,[1],[total_monto])
