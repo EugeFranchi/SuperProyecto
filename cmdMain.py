@@ -24,42 +24,59 @@ class Shell(cmd.Cmd):
         self.cmdloop()
     
     def _pedir_monto(self,cliente):
-        """Pide montos al usuario hasta que no joda mas."""
+        """
+        Pide montos al usuario hasta que no joda mas.
+        """
         #verficar que sea entero
-        monto = input("ingrese un monto o precione enter para dejar de agregar: ")
+        monto = input("Monto: ")
         if monto == "":
             return cliente
-        if not self._verificar_valor(monto):
-            print("Monto no valido...")
-            return self._pedir_monto(cliente)
+        monto = self._verificar_valor(monto)
         cliente.add(float(monto))
         return self._pedir_monto(cliente)
 
+
     def _verificar_pasado(self,cliente):
-        """Muestra al usuario el contenido de cliente y permite modificarlo si es incorrecto."""
+        """
+        Muestra al usuario el contenido de cliente y 
+        permite modificarlo si es incorrecto.
+        """
         grid_aux = GRIDRESUMEN()
         grid_aux.push(cliente)
         grid_aux.show_datos_cliente()
-        respuesta = input("¿Los datos ingresados son validos?: ")
-        if respuesta != "si":
-            if respuesta != "no":
-                print("respuesta no valida...")
-                return self._verificar_pasado(cliente)
-            nueva_posicion = input("¿que valor desea cambiar,indique su posicion?: ")
-            nuevo_monto = input("Ingrese el nuevo valor que debe contener: ")
-            if not self._verificar_valor(nuevo_monto):
-                print("Monto no valido...")
-                return self._verificar_pasado(cliente)
+        respuesta = input("¿Los datos ingresados son validos? ('*' para cancelar): ")
+        
+        if respuesta.lower() == "si":
+            return
+            
+        if respuesta.lower() == "*":
+            return -1
+            
+        if respuesta.lower() == "no":
+            nueva_posicion = input("Posición a cambiar: ")
+            while not nueva_posicion.isdigit():
+                nueva_posicion = input("Posicion invalida. Vuelva a intentarlo: ")
+            nuevo_monto = input("Nuevo monto: ")
+            nuevo_monto = self._verificar_valor(nuevo_monto)
+            
             cliente.change(int(nueva_posicion) -1,float(nuevo_monto))
             return self._verificar_pasado(cliente)
-        return cliente
+        
+        else:
+            print("Respuesta no valida.")
+            return self._verificar_pasado(cliente)
+
 
     def _verificar_valor(self,monto):
-        """Verifica si el parametro pasado es digito ya sea entero o flotante,devuelve un boleano."""
+        """
+        Verifica si el parametro pasado es digito ya sea entero o 
+        flotante. Devuelve el monto correcto.
+        """
         for caracter in monto:
                 if not caracter.isdigit() and caracter != ".":
-                    return False
-        return True
+                    nuevo = input("Monto invalido. Vuelva a intentarlo: ")
+                    return self._verificar_valor(nuevo)
+        return monto
     
     
     def do_resumen(self, parametros):
@@ -81,20 +98,25 @@ class Shell(cmd.Cmd):
         Recibe un nombre y monto. Los agrega al resumen y su archivo la deuda.
         """
         cliente = CLIENTE(nombre)
+        print("Ingrese los montos (enter para terminar)")
         cliente = self._pedir_monto(cliente)
-        self._verificar_pasado(cliente)
+        rta=self._verificar_pasado(cliente)
+        if rta == -1:
+            return
         
-        arch_cliente = BD(nombre)        
+        arch_cliente = BD(nombre.lower())        
         total_monto = 0
         for monto in cliente.montos:
             total_monto +=monto
             fecha = time.strftime("%d/%m/%y")
             arch_cliente.add([monto,fecha,self.vendedor])
         
-        if not arch_cliente.esta_id(nombre):
-            self.resumen.add([nombre,total_monto])
+        if not self.resumen.esta_id(nombre):
+            self.resumen.add([nombre.lower(),total_monto])
+        
         else:
-            self.resumen.update(nombre,[1],[total_monto])
+            nombre, deuda = self.resumen.consulta(cliente.nombre)
+            self.resumen.update(nombre.lower(),[1],[float(deuda) + total_monto])
     
     
     def do_quitar(self, nombre):
